@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <title>蔵書検索データベース</title>
+    </head>
+
+    <body>
+        <nav class="navbar navbar-expand-sm navbar-dark bg-secondary mt-3 mb-3">
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="menu">TOP</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href='add'>新規追加</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>   
+        
+        <div class="container" style="width: 70%;">
+            <h1 style="text-align: center;">蔵書データベース</h1>
+            <form action="search" method="POST">
+                <div class="mb-3">
+                    <label class="form-label">タイトル</label>
+                    <input type="text" class="form-control" name="title">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">著者</label>
+                    <input type="text" class="form-control" name="author">
+                </div>
+                <div class="my-3">
+                    <button type="submit" class="btn btn-primary">検索</button>
+                </div>
+            </form>
+
+            <h5 style="text-align: left;">検索結果</h5>
+            <table class="table table-striped">
+                <tbody>
+                    {% for book in books %}
+                    <tr>
+                        <td style="text-align: center;width: 15%;">
+                            <img src={{book.thumbnail}} alt="no image" width="128px">
+                        </td>
+                        <td width="30%">
+                            <h5 class="text-left" style="margin-bottom: 20px;">{{book.title}}</h5>
+                            <p class="text-left">著者: {{book.author}}</p>
+                            <p class="text-left">ISBN: {{book.isbn}}</p>
+                            <p class="text-left">出版社: {{book.publisher}}</p>
+                            <p class="text-left">収納場所: {{book.storage}}</p>
+                        </td>
+                        <td width='45%'>
+                            <p class="text-left">
+                                {{book.description}}
+                            </p>
+                        </td>
+                        <td style="text-align: center;">
+                            <form action="delete" method="POST">
+                                <!-- value=　値が送信できる type="submit"の場合-->
+                                <button type="submit" value={{book.isbn}} name="delete_book" class="btn btn-secondary mt-3">
+                                    削除
+                                </button>
+                            </form>
+                            <form action="modify" method="POST">
+                                <button type="submit" value={{book.isbn}} name="modify_book" class="btn btn-secondary mt-3">
+                                    修正
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %} 
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Bootstrap Bundle with Popper -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    </body>
+</html>
