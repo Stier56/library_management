@@ -8,10 +8,10 @@ webアプリの勉強を兼ねて作成しました。
 
 |変数名  |内容  |
 |:---:|:---:|
-|DATABASE     | 使用するデータベース名  |
-|API_URL  |　使用するAPIのURL（今回はgoogle books apiを使用）  |
+|DATABASE             | 使用するデータベース名  |
+|API_URL              |　使用するAPIのURL（今回はgoogle books apiを使用）  |
 |UPLOAD_FOLDER        |　csvファイルから書籍データを読み込む際に使用するcsvファイルの一時保管場所  |
-|NO_IMAGE       |　APIから書影を得られなかった際に使用する画像  |
+|SESSION_SECRET_KEY|  | セッションを暗号化するキー|
 
 
 2. 環境変数の設定

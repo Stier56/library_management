@@ -11,6 +11,7 @@ def search_book_from_db(title, author):
     try:
         sql = "SELECT * FROM books WHERE title LIKE \"%{}%\" AND author LIKE \"%{}%\";".format(title, author)
         cur.execute(sql)
+        # 複数行のレコードをlistに変換
         records = cur.fetchall()
 
         books = []
@@ -18,7 +19,7 @@ def search_book_from_db(title, author):
             book = Book(record[1], record[2], record[0], record[3], record[4], record[5], record[6])
             books.append(book)
     except:
-        print("error occurred")
+        print("An error occurred while searching data.")
     finally:
         cur.close()
         con.close()
@@ -37,7 +38,7 @@ def get_book_from_db(isbn):
         record = records[0]
         book = Book(record[1], record[2], record[0], record[3], record[4], record[5], record[6])
     except:
-        print("error occurred")
+        print("An error occurred while gitting book information.")
     finally:
         cur.close()
         con.close()
@@ -57,7 +58,7 @@ def insert_book_to_db(book):
         flag = True
     except:
         con.rollback()
-        print("error occurred")
+        print("An error occurred while inserting data.")
     finally:
         cur.close()
         con.close()
@@ -90,7 +91,7 @@ def add_book_from_csv(file_path):
                 count = count + 1
             except:
                 con.rollback()
-                print("error occurred")
+                print("An error occurred while inserting some books data.")
             
         cur.close()
         con.close()
@@ -109,7 +110,7 @@ def delete_book_from_db(isbn):
         flag = True
     except:
         con.rollback()
-        print("error occurred")
+        print("An error occurred while deleting data.")
     finally:
         cur.close()
         con.close()
@@ -117,7 +118,7 @@ def delete_book_from_db(isbn):
     return flag
 
 
-def modify_book(book):
+def update_book(book):
     flag = False
     con = get_db()
     cur = con.cursor()    
@@ -129,7 +130,7 @@ def modify_book(book):
         flag = True
     except:
         con.rollback()
-        print("error occurred")
+        print("An error occurred while updating data.")
     finally:
         cur.close()
         con.close()
@@ -140,7 +141,7 @@ def get_bookinfo_from_api(book_isbn):
     api_url = current_app.config['API_URL']
     api_key = current_app.config['API_KEY']
     req_url = api_url + book_isbn + '&key=' + api_key
-    no_image_path = current_app.config['NO_IMAGE']
+    no_image_path = 'static/images/no_image.png'
 
     try:
         api_response = requests.get(req_url, timeout=3.0)
@@ -171,6 +172,5 @@ def get_bookinfo_from_api(book_isbn):
     return book
 
 
-def allowed_file(filename):
-    ALLOWED_EXTENSIONS = {'csv'}
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+def check_extension(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() == 'csv'

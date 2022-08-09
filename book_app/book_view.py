@@ -56,25 +56,25 @@ def add():
 @frontend.route('/add-csv', methods=['POST'])
 def add_from_csv():
     if 'csv' not in request.files:
-        flash('ファイルが選択されていません')
+        flash('CSVファイルを選択してください。')
         return render_template('add.html', book=None)
 
     file = request.files['csv']
 
     if file.filename == '':
-        flash('ファイルが選択されていません。')
+        flash('CSVファイルを選択してください。')
         return render_template('add.html', book=None)
 
-    if file and book_model.allowed_file(file.filename):
+    if file and book_model.check_extension(file.filename):
         filename = secure_filename(file.filename)
-        file_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
-        file.save(file_path)
+        path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+        file.save(path)
 
-        count = book_model.add_book_from_csv(file_path)
+        count = book_model.add_book_from_csv(path)
 
-        os.remove(file_path)
+        os.remove(path)
         flash('{}冊の書籍情報の追加が完了しました。'.format(count))
-        return render_template('add.html', book=null)
+        return render_template('menu.html')
     else:
         flash('CSVファイルからの書籍の追加に失敗しました。')
         return render_template('add.html', book=None)
@@ -100,16 +100,16 @@ def delete_complete():
         return render_template('menu.html')
 
 
-@frontend.route('/modify', methods=['POST'])
-def modify():
-    book_isbn = request.form.get("modify_book")
+@frontend.route('/update', methods=['POST'])
+def update():
+    book_isbn = request.form.get("update_book")
     book = book_model.get_book_from_db(book_isbn)
 
-    return render_template('modify.html', book=book)
+    return render_template('update.html', book=book)
 
 
-@frontend.route('/modify-complete', methods=['POST'])
-def modify_complete():
+@frontend.route('/update-complete', methods=['POST'])
+def update_complete():
     book = Book(request.form.get("title"), 
                 request.form.get("author"),
                 request.form.get("isbn"),
@@ -118,7 +118,7 @@ def modify_complete():
                 request.form.get("description"),
                 request.form.get("thumbnail"))
 
-    flag = book_model.modify_book(book)
+    flag = book_model.update_book(book)
 
     if flag is True:
         return render_template('menu.html')
