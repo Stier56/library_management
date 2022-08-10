@@ -1,6 +1,5 @@
 import os
 from flask import Blueprint, current_app, flash, render_template, request
-from sqlalchemy import null
 from book_app.book import Book
 from book_app import book_model
 from werkzeug.utils import secure_filename
