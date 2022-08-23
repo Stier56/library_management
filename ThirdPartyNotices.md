@@ -74,6 +74,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ## requests
 source: https://github.com/kennethreitz/requests  
+NOTICE  
+```
+Requests
+Copyright 2019 Kenneth Reitz
+```
 kennethreitz/requests is licensed under the Apache License 2.0
 ```
 
